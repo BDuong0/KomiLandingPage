@@ -1,0 +1,40 @@
+//Reset from Kevin Powell https://www.youtube.com/shorts/2lyDv0wOQuQ
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit; 
+}
+
+img, picture, svg, video {
+    display: block;
+    max-width: 100%;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+html {
+    color-scheme: dark light;
+}
+
+html, body {
+    position: relative; // Need position relative for my full page overlay to work to fill up entire height of page
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+:focus-visible {
+    outline: 3px white solid;
+    outline-offset: 8px;
+    transition: outline 80ms ease-in;
+}

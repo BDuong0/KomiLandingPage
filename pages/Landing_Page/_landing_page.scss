@@ -1,0 +1,106 @@
+@use "../../utils/sass/utilities/commons" as c;
+
+// Background color set with utility class
+
+// This overlay is used for nav-menu and video_card and accessible from any page
+
+// For some reason when I zoom out my footer becomes an inline element which I don't want
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+body::before {
+    @include c.full-page-overlay;
+}
+
+.loader {
+    /*
+    📱&🖥️🖼️ ✅ simple design
+    ^ Mobile and Desktop Version Design 
+    📱➡️🖥️ ✅
+    ^ Going to keep same size for mobile all the way to desktop
+    📜 ✅ Javascript event listener 
+    Javascript -> loading_page.js: When page fully loads all content. The loader div will fade out.
+    
+    Features: 
+    Loader has Komi Head that poofs out in a repeated animation
+    Loader also has entire screen blur overlay behind the Komi head loading spinner
+    */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+
+    background-color: transparent;
+    -webkit-backdrop-filter: blur(10px); // Needed to add this so my blur backdrop works on mobile too
+    backdrop-filter: blur(10px);
+    opacity: var(--loader-opaicty, 1);
+    transition: opacity 200ms ease-in;
+    z-index: 4;
+
+    &__spinner {
+        // Display Grid to stack elements over each other
+        display: grid;
+        position: relative;
+        place-items: center;
+
+        position: relative;
+        
+        width: 50vw;
+        // scale: 0.5; // I want to resize the loading spiner flexibly and tried to set width on the parent container but my images won't size down proportionately so going to settle on using scale
+        // Position all of the images that make up the loading spinner at their original image size and then use the scale property to scale down proportionately so parts of my loading spinner still maintain their relative position to each other
+
+        & > * {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+        }
+
+        .spinner-head {
+            order: 1;
+            animation: head_nod_up 1.0001s ease-out infinite;
+        }
+
+        .spinner-poof {
+            order: -1;
+            animation: poof_out 1s ease-out infinite;
+        }
+    }
+}
+
+// Mobile & Tablet -> Desktop
+@media (min-width: 50em) {
+    .loader { 
+        &__spinner { // Just make the spinner icon bigger to accomodate for wider screens
+            width: 20vw;
+        }
+    }
+}
+
+@keyframes poof_out {
+    0% {
+        opacity: 0;
+        transform: translateX(0px) translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-240px) translateY(30px);
+    }
+}
+
+@keyframes head_nod_up {
+    0% {
+        rotate: 0deg;
+    }
+
+    100% {
+        rotate: 1deg;
+    }
+}

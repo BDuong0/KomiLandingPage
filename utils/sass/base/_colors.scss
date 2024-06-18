@@ -1,0 +1,32 @@
+
+
+// Color Plalete
+$purple-300: #7D6CC1;
+$purple-400: #5636D8;
+$purple-500: #4B3D8B;
+
+$blue-400: #2C369F;
+$black-400: #27292B;
+$white-400: #FFFFFF;
+
+// Color Utility Classes
+$clr-accent-300: $purple-300;
+$clr-accent-400: $purple-400;
+
+$clr-primary-400: $blue-400;
+
+$clr-neutral-100: $white-400;
+$clr-neutral-900: $black-400;
+
+// Background color
+.bg-accent-300 { background-color: $purple-300; }
+.bg-accent-400 { background-color: $purple-400; }
+.bg-accent-500 { background-color: $purple-500; }
+
+.bg-primary-400 { background-color: $blue-400; } 
+.bg-neutral-100 { background-color: $white-400; } 
+.bg-neutral-900 { background-color: $black-400; } 
+
+// Text Colors
+.text-neutral-100 { color: $white-400}
+.text-neutral-900 { color: $black-400}

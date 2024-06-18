@@ -1,0 +1,76 @@
+@use "../../utils/sass/base" as b;
+@use "../../utils/sass/utilities/commons" as commons;
+
+/* 
+📱&🖥️🖼️ ✅
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness 
+📜 No Javascript needed
+
+🟦 = Current
+⬜ = not started
+*/
+
+// btn-1 is my buttons that have a shade of purple as their bg color
+// btn-1 is not responsive on purpose b/c this style is meant for hero section only
+@mixin btn-1_style($bg-color) {
+    color: white;
+    font-size: b.$fs-500;
+    background-color: $bg-color;
+
+    // Same size from mobile to desktop cause it looks decent
+    padding-block: 8px; //0.5 em
+    padding-inline: 40px; //2.25 em
+    
+    border-radius: 8px;
+    border: 1px solid black;
+    text-decoration: none;
+    z-index: 1; //Need this or else a tag can't be hovered or clicked
+
+    transition: background-color ease-in 200ms;
+}
+
+// btn-2 is the button with white bg
+// btn-2 responsiveness is done with clamps
+@mixin btn-2_style($bg-color) {
+    background-color: $bg-color;
+    font-size: clamp(b.$fs-300, 4vw ,b.$fs-500);
+    
+    padding-block: clamp(4px,2vw,8px); //0.5 em
+    padding-inline: clamp(18px,6vw,36px); //2.25 em
+    
+    transition: background-color ease-in 200ms, color ease-in 200ms;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid black;
+}
+
+.btn-1_v1, .btn-1_v2 {
+    @include btn-1_style(b.$purple-300);
+
+    &:hover,
+    &:focus-visible {
+        background-color: b.$purple-400;
+    }
+
+    
+}
+
+.btn-1_v2 {
+    @include btn-1_style(b.$purple-500);
+}
+
+.btn-2 {
+    @include btn-2_style(b.$clr-neutral-100);
+
+    &:hover,
+    &:focus-visible {
+        background-color: b.$clr-neutral-900;
+        color: b.$clr-neutral-100;
+    }
+
+    &:focus-visible {
+        outline: 3px black solid;
+    }
+}

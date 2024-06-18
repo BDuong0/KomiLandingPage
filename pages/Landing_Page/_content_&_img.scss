@@ -1,0 +1,72 @@
+@use "../../utils/sass/base" as b;
+
+/* 
+📱&🖥️🖼️ ✅
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness 
+📜 ⬜ No Javascript Needed
+
+Component done on Nov 15, 2023
+*/
+
+.content-and-img {
+    row-gap: 24px;
+
+    // on-scroll animation 
+    opacity: 0;
+    transition: opacity 2s linear;
+
+    &__content {
+        
+        & h2 {
+            font-size: clamp(b.$fs-400, 6vw, b.$fs-600);
+            
+            margin-bottom: 16px;
+
+            text-align: center;
+        }
+    }
+}
+
+@media (min-width: 464px) {
+    .content-and-img {
+        align-items: center;
+        justify-items: center;
+        
+        // Change Order of grid items w/o editing the html 
+        &__content {
+            order: 1;
+        
+            margin-left: clamp(1px, 6vw, 96px);
+
+            & h2 {
+                font-size: clamp(b.$fs-800, 5vw, b.$fs-900);
+            }
+
+            & p {
+                font-size: clamp(b.$fs-400, 2vw, b.$fs-500);
+                
+            }
+        }
+    
+        & img {
+            order: 2;
+            
+            width: min(80%, 360px);
+            
+        }
+    }
+}
+
+
+@keyframes fadeinSlideUp {
+    0% {
+        transform: translateY(20px);
+    }
+
+    100% {
+        // Have to animate opacity separately b/c if original opaicty is 0.5 then when I set oapcity to 1 in the keyframes then "1" is actually 0.5
+        transform: translateY(0px);
+    }
+}

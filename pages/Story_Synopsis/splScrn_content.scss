@@ -1,0 +1,166 @@
+@use "../../utils/sass/base" as b;
+
+
+.splScrn-container {
+    $h1-color: white;
+    $p-color: white;
+    $mobile-column-row-gap: 24px;
+    $h1-p-row-gap: 16px;
+
+    $content-side-spacing: 16px;
+    $heading-font-size: b.$fs-600;
+    $paragraph-font-size: b.$fs-400;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: $mobile-column-row-gap;
+
+    .splScrn-group {
+        display: flex;
+        flex-direction: column;
+        row-gap: $mobile-column-row-gap;
+        
+        transition: opacity 200ms ease-in;
+
+        &__img {
+            height: 100dvh;
+
+            opacity: 1;
+
+            & img {
+                object-fit: cover;
+                object-position: center;
+
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &__content-wrap {
+            grid-column-start: 2; // When css order doesn't work use grid's grid-column start
+                // I want to position my text to the right side while having the left side an fixed pos child
+            
+            width: 100vw;
+
+            transition: opacity 200ms ease-in;
+
+            & .splScrn-group__content {
+                display: flex;
+                flex-direction: column;
+                row-gap: $h1-p-row-gap;
+
+                margin-inline: $content-side-spacing;
+
+                & h1 {
+                    color: $h1-color;
+                    font-size: $heading-font-size;
+                }
+
+                & p {
+                    color: $p-color;
+                    font-size: $paragraph-font-size;
+                }
+            }
+        }
+    }
+}
+
+// Mobile -> Tablet & Desktop
+@media (min-width: 39.5em) {
+    
+    .splScrn-container {
+        // $mobile-column-row-gap replaced with 2 variables below for now grid container
+        $splScrn-left-side-width: 50vw;
+        $splScrn-right-side-width: 50vw;
+        
+        $content-side-spacing: clamp(32px, 5vw, 64px);
+        // 32 - 64
+        $content-top-bottom-spacing: 64px;
+        $h1-p-row-gap: 16px;
+
+        $heading-font-size: clamp(b.$fs-600, 3vw, b.$fs-800);
+        $paragraph-font-size: clamp(b.$fs-500, 2vw, b.$fs-600);
+
+        .splScrn-group {
+            display: grid;
+            grid-template-columns: $splScrn-left-side-width $splScrn-right-side-width;
+
+            // border: 1px purple solid;
+            
+            &__img { // Left side is made to be fixed
+                position: fixed;
+                
+                top: 0;
+                height: 100dvh;
+                width: $splScrn-left-side-width;
+
+                transition: opacity 0.2s ease-in;
+            }
+    
+            &__content-wrap { // Right side is made to be only scrollable
+                width: $splScrn-right-side-width;
+                
+                // All paragraphs have a minimum height of 100dvh but if I have very large paragraphs I can have those paragraphs be fit-content while still retaining the 100dvh on my smaller paragraphs
+                min-height: 100dvh;
+                height: fit-content;
+                width: 100%;
+    
+                // border: 1px blueviolet solid;
+
+                & .splScrn-group__content {
+                    row-gap: $h1-p-row-gap;
+                    
+                    margin-block: $content-top-bottom-spacing;
+                    margin-inline: $content-side_spacing;
+
+                    & h1 {
+                        font-size: $heading-font-size;
+                    }
+    
+                    & p {
+                        font-size: $paragraph-font-size;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// For super wide screens
+// Responsive design for super wide screen is not perfect but I got something decent
+@media (min-width: 1426px){
+    body {
+        display: flex;
+        justify-content: center;
+    }
+
+    // I gave math width to my left and right side split screen because I didn't want my text to be too long charater width to where it's not as readable
+    .splScrn-container {
+        $heading-font-size: clamp(b.$fs-800, 3vw, b.$fs-1000);
+        $paragraph-font-size: clamp(b.$fs-700, 2vw, b.$fs-800);
+
+        .splScrn-group { // Use Javascript to make my fixed position unages behave like pos relative where they move along with my 
+            &__img { // Left side is made to be fixed
+                max-width: 40vw;
+                right: 50%;
+            }
+
+            &__content-wrap { // Can't set max-width on parent container so have to set max-widths on child elemnts
+                max-width: 100ch;
+
+                & .splScrn-group__content {
+                    & h1 {
+                        font-size: $heading-font-size;
+
+                    }
+    
+                    & p {
+                        font-size: $paragraph-font-size;
+
+                    }
+                }
+            }
+        }
+    }
+
+}

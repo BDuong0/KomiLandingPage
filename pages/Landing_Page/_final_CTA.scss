@@ -1,0 +1,61 @@
+/* 
+📱&🖥️🖼️ ✅
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness 
+📜 No Javascript needed
+
+🟦 = Current
+⬜ = not started
+
+Layout done on Nov 26
+*/
+
+// How I got the button's to 'stay in place' as the image changes in size is my dirty solution
+// Max image size implicitly set by container utlity class makes it simplier to keep the buttons 'in place' with a few media querries
+// Realistically the buttons don't 'stay aligned' when viewport gets to a size that's no mobile screens exist in 
+// Button placement looks decent on the mobile screens I've tested in Firefox responsive mode
+
+.final_CTA {
+    //margin-inline is auto from the container utlity class
+    // Image is responsive the way I like from the container utlity class w/o me adding additional code
+    
+    //on-scroll animation
+    opacity: 0;
+    transition: opacity 1s ease-in;
+
+    a.btn-2:nth-child(1) {
+        transform: translateX(-14px) translateY((10px));
+        
+        rotate: -7deg;
+    }
+
+    a.btn-2:nth-child(2) {
+        transform: translateX(-14px) translateY((90px));
+        
+        rotate: -7deg;
+    }
+}
+
+// Reposition buttons from mobile to tablet and desktop
+@media (min-width: 34.5625em) {
+    .final_CTA {
+        a.btn-2:nth-child(1) {
+            transform: translateX(-20px) translateY((10px));   
+        }
+        a.btn-2:nth-child(2) {
+            transform: translateX(-24px) translateY((170px));
+        }
+    }
+}
+
+@keyframes scaleUpReveal {
+    0% {
+        transform: scale(0.99, 0.99);
+        //using the transform: scale property and not the scale property by itself b/c I heard from web dev simplified about transforms are good for performant animations
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+}

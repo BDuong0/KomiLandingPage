@@ -1,0 +1,62 @@
+@use "colors" as c;
+
+// Font-Family
+$ff-body: 'Switzer', sans-serif;
+$ff-accent: 'Plein', sans-serif; //accent = headings, subheadings and buttons
+
+.ff-body { font-family: $ff-body;}
+.ff-accent { font-family: $ff-accent;}
+
+body {
+    font-family: $ff-body;
+    //font size
+    //color
+}
+
+// Font Scale
+$fs-1100: 4.750rem; //76
+$fs-1000: 3.812rem; //61
+$fs-900: 3.062rem; //49
+$fs-800: 2.438rem; //39
+$fs-700: 1.938rem; //31
+$fs-600: 1.562rem; //25
+$fs-500: 1.250rem; //20
+$fs-400: 1rem; //16
+$fs-300: 0.812rem; //13
+
+
+// Global Font Sizes
+$fs-primary-heading: $fs-900;
+$fs-secondary-heading: $fs-600;
+$fs-third-heading: $fs-500;
+
+
+$body-fs-500: $fs-500;
+$body-fs-400: $fs-400; 
+$body-fs-300: $fs-300;
+
+
+// HTML Tag Sizes
+
+.fs-primary-heading { font-size: $fs-primary-heading; }
+
+.fs-secondary-heading { font-size: $fs-secondary-heading; }
+
+.fs-third-heading { font-size: $fs-third-heading; }
+
+
+
+// Body font sizes
+.fs-body-500 { font-size: $body-fs-500; }
+.fs-body-400 { font-size: $body-fs-400; }
+.fs-body-300 { font-size: $body-fs-300; }
+
+
+// Font Weights
+$fw-regular: 400;
+$fw-bold: 700;
+
+.fw-regular { font-weight: $fw-regular; }
+
+.fw-bold { font-weight: $fw-bold; }
+

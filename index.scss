@@ -1,0 +1,16 @@
+// Utility Stuff
+@use "./utils/sass/base";
+@use "./utils/sass/utilities";
+
+// Landing Page (index.html)
+@use "./pages/Landing_Page";
+
+// Nav Menu link 1: Characters Page
+@use "./pages/Character_Gallery/char_card_gallery.scss";
+
+// Nav Menu link 2: Story Synopsis 
+@use "./pages/Story_Synopsis/splScrn_content.scss";
+
+// Nav Menu link 3: anime reviews
+@use "./pages/Anime_Reviews/anime_reviews.scss"
+

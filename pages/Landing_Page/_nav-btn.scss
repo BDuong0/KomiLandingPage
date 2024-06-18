@@ -1,0 +1,167 @@
+@use "../../utils/sass/base" as b;
+
+
+/* _nav-btn-scss <-> _nav-menu-scss
+📱&🖥️🖼️ ✅
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness Complete 
+📜 ✅
+^ Prototype Javascript -> "nav-menu.js"
+
+Component done on Nov 3, 2023
+*/
+
+/*
+Circle Nav Button that expands when you hover over it
+*/
+
+$nav-icon-size: 96px;
+
+
+
+.nav-btn-icon {
+    background-color: b.$clr-accent-400;
+    border: none;
+    
+    position: fixed;
+    
+    top: 0;
+    right: 0;
+    margin-top: 12px;
+    margin-right: 12px;
+    width: $nav-icon-size;
+    height: $nav-icon-size;
+    
+    transition: scale ease-in 200ms, background-color ease-in 200ms;
+
+    overflow: hidden;
+    border-radius: 50%; // This plus width & height turn div into circle
+    z-index: 1; // Why can't I set the z-index when the button is in its clsoed state
+    
+    
+    & svg { // Menu Close Icon for when nav menu is opened
+        position: relative;
+        color: white;
+
+        width: 50%;
+        height: 50%;
+        bottom: 13px;
+
+        opacity: 0;
+        transition: opacity ease-in 200ms;
+    }
+
+    & p { // "MENU" Text
+        position: relative;
+    
+        top: 27px;
+    
+        font-size: b.$fs-300;
+    }
+
+    // Nav Menu Hover Animation
+    &:hover,
+    &:focus-visible { 
+        scale: 1.1;
+        cursor: pointer;
+    }
+
+
+    &:hover .komi-face,
+    &:focus-visible .komi-face{
+        left: 3px;
+
+        &__head {
+            rotate: 0.5deg;
+        }
+
+        &__poof {
+            opacity: 1;
+            left: -31px;
+        }
+    }
+}
+
+
+
+
+.komi-face {
+    position: relative;
+
+    left: 0px;
+    width: inherit;
+    height: inherit;
+
+    opacity: 1;
+    transition: left ease-in 200ms, opacity ease-in 200ms;
+
+    &__poof {
+        position: relative;
+        
+        top: -9px;
+        left: 0px;
+        width: 13%;
+        
+        opacity: 0;
+
+        transition: left ease-in 200ms, opacity ease-out 200ms;
+    }
+
+    &__head {
+        position: relative;
+        
+        top: -12px;
+        rotate: -5deg;
+        width: 55%;
+
+        transition: rotate ease-in 200ms;
+    }
+}
+
+// Desktop & Tablet Version 
+@media (min-width: 50em) {
+    $nav-icon-size: 120px;
+    
+    .nav-btn-icon { //Resize nav btn icon
+        width: $nav-icon-size;
+        height: $nav-icon-size;
+    }
+
+    .nav-btn-icon p {
+        top: 32px;
+        font-size: b.$fs-400;
+    }
+
+    .komi-face {
+        &__poof {
+            top: -3px;
+        }
+
+        &__head {
+            rotate: -5deg;
+            transition: scale ease-in 200ms;
+            transition: rotate ease-in 200ms;
+        }
+    }
+
+
+    // Modified Nav Icon Animations 
+    .nav-btn-icon {
+        &:hover .komi-face,
+        &:focus-visible .komi-face {
+            left: 3px;
+        }
+        
+        &:hover .komi-face, 
+        &:focus-visible .komi-face{
+            &__poof {
+                left: -39px;
+            }
+
+            &__head {
+                scale: 1.05;
+            }
+        }
+    }
+}

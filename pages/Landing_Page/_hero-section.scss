@@ -1,0 +1,108 @@
+@use "../../utils/sass/base" as b;
+
+/* 
+📱&🖥️🖼️ ✅
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness 
+📜 No Javascript needed 
+
+🟦 = Current
+⬜ = not started
+component done on Nov 8, 2023
+*/
+
+@mixin text_strobe($border-color){
+    text-shadow: 0px 4.74px 10px rgba(0,0,0,0.5), // first shadow is for the word shadow
+                // These four text shadows are for the strobe effect
+                // no native strobe effect in css so will have to use shadows to replicate
+                -1px 0 6px $border-color, 
+                0 1px 6px $border-color,
+                1px 0 6px $border-color, 
+                0 1px 6px $border-color;
+}
+
+.hero-section {
+    background-color: b.$blue-400;
+
+    height: clamp(648px, 100vw, 1080px); // different heights for mobile, tablet, and desktop
+
+    overflow: hidden;
+
+    &__bg {
+        align-self: start;
+        
+        z-index: 0;
+        transform-origin: top center;
+        transform: translateY(-32px);
+        scale: 1.83;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-self: end;
+        align-items: center;
+        text-align: center;
+        row-gap: 19px;
+
+        margin-bottom: 128px;
+
+        z-index: 0;
+        
+        & .hero-title {
+            font-size: b.$fs-900;
+
+            @include text_strobe(b.$purple-400);
+            
+            padding-inline: 20px;
+        }
+        & .hero-subtitle {
+            font-size: b.$fs-400;
+
+            @include text_strobe(b.$blue-400);
+
+        }
+
+        & .hero-section__cta {
+            display: flex;
+            gap: 36px;
+        }
+    }
+}
+
+// Based each media querry on the of each layout (mobile, tablet, desktop) falls apart
+// Mobile -> Tablet 
+@media (min-width: 32.25em) {
+    .hero-section {
+    
+        &__bg { // Realign and resize hero image to fit on tablet screen
+            scale: 1.4;
+            transform: translateY(-160px);
+        }
+
+        &__content {
+            align-self: center;
+
+            // Font-size change for both tablet and desktop
+            & .hero-title { 
+                font-size: b.$fs-1100;
+            }
+            & .hero-subtitle {
+                font-size: b.$fs-600;
+            }
+        }
+    }
+}
+
+// Tablet -> Desktop
+@media (min-width: 55.6875em) {
+    .hero-section {
+        &__bg { // Realign and resize hero image to fit on desktop
+            // Setteled on this hero image resize adjustment b/c full width of page wouldn't look good
+            scale: 1.7;
+            transform: translateY(-160px);
+        }
+    }
+}
+

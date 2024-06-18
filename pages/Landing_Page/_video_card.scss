@@ -1,0 +1,204 @@
+@use "../../utils/sass/base" as b;
+@use "../../utils/sass/utilities/commons" as commons;
+
+/* 
+📱&🖥️🖼️ ✅ 
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness Complete 
+📜 ✅
+^ Prototype Javascript -> ""
+
+Component Done on Nov 22
+
+// ⏩ This component uses full page dark tint overlay from common.scss in utilities folder
+
+Component Features
+- Hover animation when you over over the card
+- Close button on the top right of the popup video
+- Javascript should work for N amount of video cards in the video card wrapper  so long as they have the same nested elements
+- Javascript should make individual videos reload each time you click on the video card by removing the embed video and added it back into the DOM
+- Embed YouTube video autoplays without sound which I think is b/c of Google rules
+
+- on scroll animation to reveal element
+*/
+.video-card-wrapper { // This is the container that holds the two video cards
+    // container + even-columns utility class already applied here
+    display: grid;
+    //justify-items: center;   
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-row-gap: 24px;
+    grid-column-gap: 24px;
+
+}
+
+.video-card { // element that includes the actual video card and the heading text that goes with it
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: relative;
+
+    // On-scroll animation to reveal video card
+    opacity: 0;
+    transition: opacity 2s linear;
+
+    & .play-icon {
+        color: white;
+
+        width: 10%;
+
+        z-index: 0;
+
+        &:hover { //W/o this entire video card except play icon would have the pointer cursor hover
+            cursor: pointer;
+        }
+    }
+
+    & &__card {
+        background-color: transparent;
+        
+        position: relative;
+
+        order: 1;
+
+        &::before { // Video dark overlay
+            content: "";
+            background-color: black;
+            
+            position: absolute;
+
+            width: 100%;
+            height: 100%;
+
+            opacity: 0.2;
+            transition: opacity ease-in 200ms;
+        }
+
+        &:hover::before,
+        &:focus-visible::before { //Hover over video card affect video card's before psuedo-element
+            cursor: pointer;
+            opacity: 0.4;
+        }
+
+    }
+
+    & &__title {
+        order: 2;
+    }
+
+    /* 
+    Pop Up Video Section
+    */
+
+    &__popup[data-visible="hide"] {
+        display: none;
+
+        & > *{ //select all children
+            display: none;
+        }
+    }
+
+    &__popup[data-visible="show"]{
+        display: inline;
+        
+        & iframe {
+            display: inline;
+        }
+    }
+
+    &__popup .popup_wrapper{
+        position: fixed; // I can position my button based on the size of the YouTube video
+
+        aspect-ratio: 16 / 9; // Need to remove the width and height attributes on the iframe youtube embed html for aspect-ratio and setting just the width to work
+        width: 100%;
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%); // As size fo video popup changes keep the video in the center of the screen
+        z-index: 3;
+    }
+
+    &__popup iframe {
+        width: 100%;
+        height: 100%;
+
+        &:focus-visible {
+            outline: none;
+        }
+    }
+
+    &__popup .video_close_btn {
+        color: white;
+        border: none;
+        background-color: transparent;
+        
+        position: absolute; // position button based on dimenstions of YouTube embed video
+        
+        $close_btn_size: 32px; 
+        width: $close_btn_size;
+        top: -$close_btn_size;
+        right: $close_btn_size - 30px;
+
+        opacity: 0.7;
+        transition: opacity ease-in 200ms;
+        z-index: 5;
+
+        &:hover {
+            opacity: 1;
+        }
+
+    }   
+}
+
+// Mobile -> Tablet & Desktop 
+@media (min-width: 564px) { // Set breakpoint to natural breakpoint of the grid-template-columns where the grid 
+                            // container goes from 1 column to 2 columns
+    .video-card-wrapper {
+    
+        & .video-card:first-child {
+            margin-left: 24px;
+        }
+    
+        & .video-card:last-child {
+            margin-right: 24px;
+        }
+    }
+
+    .video-card {
+
+        &__popup .popup_wrapper{
+            width: 80%;
+        }
+
+        &__popup .video_close_btn {
+            
+            width: clamp(19px,10vw,32px);
+            top: -clamp(19px,10vw,32px);
+            right: 0px;
+            transform: translateX(32px);
+        }
+    }
+}
+
+@keyframes right_slide_in {
+    0% {
+        transform: translateX(-80px);
+    }
+
+    100% {
+        // Have to animate opacity separately b/c if original opaicty is 0.5 then when I set oapcity to 1 in the keyframes then "1" is actually 0.5
+        transform: translateX(0px);
+    }
+}
+
+@keyframes left_slide_in {
+    0% {
+        transform: translateX(80px);
+    }
+
+    100% {
+        // Have to animate opacity separately b/c if original opaicty is 0.5 then when I set oapcity to 1 in the keyframes then "1" is actually 0.5
+        transform: translateX(0px);
+    }
+}

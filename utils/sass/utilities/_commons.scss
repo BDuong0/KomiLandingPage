@@ -1,0 +1,46 @@
+//Full Page Overlay Dark Tint
+@mixin full-page-overlay {
+    content: '';
+    background-color: black;
+
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    // When overlay is hidden I want to be able to click on links so z-index helps
+    opacity: var(--overlay_opacity, 0);
+    z-index: var(--overlay_z-index, -2);
+    
+    transition: opacity ease-in 200ms, z-index ease-in 200ms;
+}
+
+@mixin contrast_overlay($opacity) { //Overlay is applied to entire image 
+    // Apply mixin to ::before psuedo-element 
+    content: '';
+    background-color: black;
+        
+    position: absolute;
+    // Make sure you have position relative on the parent element you want to create a contrast overlay for
+
+    width: 100%;
+    height: 100%;
+
+    opacity: $opacity;
+    transition: opacity 200ms ease-in;
+}
+
+@mixin scroll_shadow_basestyles($box-shadow){
+    content: "";
+                    
+    box-shadow: $box-shadow;
+    width: 100%;
+    height: 32px;
+    // Can't do height 100% or else it would position my scroll shadow wrong. Turns out I don't even need height, or the top or left properties to get the scroll shadow position I want.
+
+    position: absolute; // Position absolute got me my desired 'fixed' behavior
+
+    transition: opacity 200ms ease-in;
+    opacity: 0.6;
+    z-index: 1;
+}
+

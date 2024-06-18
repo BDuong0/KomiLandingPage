@@ -1,0 +1,685 @@
+@use "../../utils/sass/base" as b;
+@use "../../utils/sass/utilities/commons" as c;
+@use "../../utils/sass/utilities/container" as container;
+
+
+// Copied code from https://css-tricks.com/an-auto-filling-css-grid-with-max-columns/
+
+
+// User-input values
+$max-column-count: 5;
+$grid-layout-gap: 8px;
+$grid-item--min-width: 160px;
+
+// Calculate Values
+$gap-count: calc($max-column-count - 1); // 5 columns equals 4 gaps in between
+$total-gap-width: calc($gap-count * $grid-layout-gap); // Add the total of all column gaps. 4 gaps x 8 px = 32px of total gap width
+$grid-item--max-width: calc((100% - $total-gap-width) / $max-column-count); // (100% - 32px) / 5 (max columns) = ~20%
+// Remember 20% 20% 20% 20% 20% is even 5 columns
+
+.pfp-card-gallery { // Grid container w/ max 5 columns and infinite responsive down. No media queries needed
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(max($grid-item--min-width, $grid-item--max-width), 1fr));
+        // Need to take gap into account when calculating max-width of grid item
+        // When ~25% is bigger than the min width of 176px. The auto-fit will stop because the new "min-width" for the grid items will never be reach since ~25% is a relative unit.
+        // When 176px is bigger than ~25% (viewport width) then auto-fit will be active again and start resizing columns each time 200px is reached as the viewport gets smaller
+    grid-gap: $grid-layout-gap;
+    
+
+    // used utility class to center my gallery in middle of screen
+    width: 95dvw; // Grid container will also resize grid items because grid items by deafult take up the width of their grid cell
+    // max-width: 1500px;
+    //height: 100vh; 
+    margin-block: 8px;
+
+    // Used flex to center my gallery in the middle of the screen
+        // Could center my gallery container horizontally with margin-inline auto but couldn't do it with margin-block auto or grid + place-items:center    
+
+    & > * {
+        aspect-ratio: 1 / 1; // Make sure all of my grid child items are the same size
+        // width of grid items is changing so height of each grid item will change in proportion
+    }
+
+}
+
+$name_pfp_spacing: 8px; // Adjust the vertical space between the pfp picture and name text 
+// 8px in between the picture text
+// 8px of spacing on top of pfp & 8px of spacing on bottom of name text
+
+
+.pfp-card {
+    $pfp-card-name-font-size: clamp(b.$fs-400, 2vw, b.$fs-600);
+    $text-color: white;
+    /*
+    ==== Profile Picture Card === nested 0 deep 
+    */
+    background-color: b.$purple-500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: $name_pfp_spacing;
+
+    height: 100%; // For some reason if I don't have this, some of my grid child items will not be same height size
+    width: 100%;
+    
+    border: none;
+    transition: background-color 150ms ease-out;    
+    z-index: 1;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    // On-hover animation does 2 thingss: Card Background change color & img scales up a little bit
+    &:hover &__pic img,
+    &:focus-visible &__pic img {
+        scale: 1.05;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background-color: b.$purple-300;
+        outline-offset: 0;
+    }
+
+    &__pic { // This is the div 'mask' the actual picture will be in
+        width: 80%;
+        height: 90%;
+        margin-top: $name_pfp_spacing;
+
+        border-radius: 8px;
+        overflow: hidden;
+
+        & img {
+            object-fit: cover;
+            
+            width: 100%;
+            height: 100%;
+            
+            transition: scale 150ms ease-out;
+        }
+
+    }
+
+    &__name {
+        color: $text-color;
+        font-size: $pfp-card-name-font-size;
+        
+        margin-bottom: $name_pfp_spacing;
+    }
+
+    /*
+        ==== Info Card === nested 1 deep 
+    */
+
+}
+
+// I used to have my picture silder nested within my info_card and used height: 100% to get my picture slider to become the same height as the info_card
+// Decided to make my info card and picture slider adjacent to each other in the DOM for accessbility reasons
+// Used global SASS variables to get my info card and picture slider to be the same height, when I can't use height: 100% because the picture slider is now not nested within my info_card
+$info_card_n_slider_height_mobile: 465px;
+$info_card_n_slider_height_tablet: 600px;
+$info_card_n_slider_height_desktop: 560px;
+.pfp-card__info-card {
+    $text-color: white;
+    $close-btn-size: 40px;
+    $content-side-spacing: 1rem;
+    $picGallery-column-gap: 46px;
+    $picGallery-row-gap: 24px;
+    
+    // Applied overflow hidden to my header content and my picture gallery in case dozens of trivia facts and pcitures are added so my layout doesn't break when adding lots of info to a info card
+    // Basically overflow hidden to header content and picture gallery so only like max of ~6 trvia facts and ~12 pictures are visible at a time.
+    // https://www.youtube.com/watch?v=jLtNh5Kl4TA
+
+    background-color: b.$purple-300;
+    display: flex;
+    justify-content: center;
+
+    position: fixed;
+
+    top: 50dvh;
+    left: 50%;
+    width: 100%;
+    height: $info_card_n_slider_height_mobile;
+    
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    transition: opacity 200ms ease-in;
+    opacity: 0; // Need to set inital opacity for transition to work on first btn click
+
+    &[data-visible="hide"] {
+        display: none;
+    }
+
+    &[data-visble="show"] {
+        display: block;
+    }
+
+    & &__wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: $content-side-spacing;
+        
+        width: 90%;
+        max-width: 1304px;
+    }
+
+    & &__wrapper .info-card__close-btn {
+        color: $text-color;
+        background-color: transparent;
+        
+        position: fixed; //Override overflow hidden by setting overflow and pos relative to the element's immediate parent and set the element's position to fixed
+        // https://www.youtube.com/watch?v=jLtNh5Kl4TA
+
+        width: $close-btn-size;
+        top: -$close-btn-size; // Can't move my close btn up base on the icon's height with translateY()
+        right: $close-btn-size - $close-btn-size + 4px;
+        
+        opacity: 0.7;
+        border: none;
+        transition: opacity ease-in 200ms;
+        z-index: 3;
+
+        & svg {
+            color: white;
+            width: 100%;
+            height: 100%;
+        }
+
+        &:hover,
+        &:focus-visible {
+            opacity: 1;
+        }
+
+        &:focus-visible {
+            outline-offset: 1px;
+        }
+    }
+
+    
+
+    & &__wrapper .info-card__header {
+        display: flex;
+        column-gap: 8px;
+
+        width: 100%;
+        height: 32%;
+
+        margin-top: $content-side-spacing;
+
+        & > div.info-card__header_pfp {
+            flex-grow: 1; // flex-grow and flex-shrink on both 2 child items so they grow/shrink at the same rate
+            flex-shrink: 1; 
+            flex-basis: 50%; // flex-basis so I want content size to not affect the sizing of flex items. Flex items stay at their size no matter how big the content in it is.
+                             // ^ Solution from Kevin Powell video https://www.youtube.com/watch?v=vQAvjof1oe4
+                             // Lesson do most the flexbox sizing of the parent and child flexbox containers. Not the flexbox child contents like the ul or a h1
+
+            & img {
+                width: 100%;
+                height: 100%;
+
+                object-fit: cover;
+                border-radius: 6px;
+            }
+        }
+
+        & > div.info-card__header_content { // Content
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 70%;
+
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            row-gap: 4px;
+
+            overflow-y: auto;
+
+            & h1 {
+                color: $text-color;
+                flex-grow: 0;
+                font-size: clamp(b.$fs-400, 3vw, b.$fs-700);
+            }
+
+            & .info-card__header_list-viewbox {
+                flex-grow: 3;
+                
+                // By default position is relative;
+
+                overflow-y: scroll; // I wanted to be able to scroll through my ul while still showing the info_card title
+
+                &:focus-visible {
+                    outline-offset: -2px;
+                }
+
+                &::before { // Scroll shadow at TOP of list viewbox
+                    @include c.scroll_shadow_basestyles(inset 0 30px 30px -24px white);
+                    opacity: var(--top-scroll-shadow-opacity, 0.6);
+                }
+
+                &::after { // Scroll shadow at BOTTOM of list viewbox
+                    @include c.scroll_shadow_basestyles(inset 0 -30px 30px -24px white);
+                    opacity: var(--bottom-scroll-shadow-opacity, 0.6);
+                    bottom: 0;
+                }
+
+                & ul.info-card__header_list {
+                    flex-grow: 1;
+                    font-size: clamp(b.$fs-300, 2vw, b.$fs-400);
+                    
+                    list-style-type: none;
+    
+                    li {
+                        color: $text-color;
+                        
+                        position: relative;
+        
+                        padding-left: 12px;
+        
+                        &:before { // Bullet point circle
+                            content: "";
+                            background-color: $text-color;
+                            
+                            position: absolute;
+        
+                            width: 5px;
+                            height: 5px;
+                            top: 0;
+        
+                            transform: translateY(100%) translateX(-8px); // Make sure circle mark moves with the text if I reposition it 
+                            
+                            border-radius: 50px;
+                        }
+                    }
+                }
+            } // End of .info-card__header_list-viewbox styles
+
+        }
+    }
+
+    & &__wrapper .info-card__pictures {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+        column-gap: $picGallery-column-gap;
+        row-gap: $picGallery-row-gap;
+        
+        width: 95%;
+        height: 58%; // I could have sized this grid container with the overflow and not have to explicitly size the parent wrapper container but this works still
+        margin-bottom: 16px;
+
+        overflow-y: auto;
+
+        &:focus-within {
+            outline: 3px white solid;
+            outline-offset: 0px;
+        }
+        
+        & > li{
+            position: relative;
+            
+            width: 100%;
+            height: 100px;
+            object-fit: contain;
+
+            & button {
+                background-color: transparent;
+                border: none;
+                
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+
+                &:before {
+                    @include c.contrast_overlay(0.1);
+                    left: 0;
+                }
+    
+                &:hover:before {
+                    cursor: pointer;
+                    @include c.contrast_overlay(0.4);
+                }
+
+                &:focus-visible {
+                    outline-offset: 0px;
+                }
+                
+                &:focus-visible:before {
+                    @include c.contrast_overlay(0.4);
+                }
+
+                & img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain; // Need declared width and height for object-fit to work
+                }
+            }
+
+        }
+    }
+
+    @media (min-width: 29rem) { // Mobile -> Tablet 
+        & {
+            height: $info_card_n_slider_height_tablet;
+
+            & &__wrapper .info-card__header {
+
+                height: 40%;
+
+                & > div.info-card__header_pfp {
+                    flex-basis: 30%;
+                }
+            }
+
+            & &__wrapper .info-card__pictures {
+                height: 60%;
+            }
+        }
+    }
+
+    @media (min-width: 930px) { // Tablet to Desktop
+        //For ultra wide screens I choose not to set a max-width on my parent pfp-card-gallery container because I want it to take up entire viewport on wider screens
+        & {
+            $picGallery-row-gap: 16px;
+                
+            height: $info_card_n_slider_height_desktop;
+
+            & &__wrapper .info-card__header {
+
+                height: 40%;
+
+                & > div.info-card__header_pfp {
+                    flex-basis: 15%;
+                }
+            }
+
+            & &__wrapper .info-card__pictures {
+                column-gap: $picGallery-column-gap;
+                row-gap: $picGallery-row-gap;
+
+                padding-inline: $content-side-spacing * 2;
+                height: 55%;
+            }
+
+            & .info-card__picture-slider {
+                & .picture-slider__container {
+                    & .picture-slider__view-box {
+                        margin-top: 8px;
+                        height: 75%;
+                    }   
+                }
+            }
+        }
+    }
+}
+
+.info-card__picture-slider {
+    $slider-close-btn-size: 40px;
+    $slider-move-btn-size: 32px;
+    
+    background-color: b.$purple-300;
+    display: grid;
+    place-items: center;
+
+    position: fixed;
+
+    width: 100%;
+    height: $info_card_n_slider_height_mobile;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+
+    z-index: 3;
+    transition: opacity 200ms ease-in;
+    opacity: 0;
+
+    &[data-visible="hide"] {
+        display: none;
+    }
+
+    &[data-visble="show"] {
+        display: block;
+    }
+
+    & .picture-slider__close-btn {
+        background-color: transparent;
+        
+        position: absolute;
+
+        width: $slider-close-btn-size;
+        top: 4px;
+        right: $slider-close-btn-size - $slider-close-btn-size + 4px;
+        
+        border: none;
+
+        & svg {
+            color: white;
+            width: 100%;
+            height: 100%;
+        }
+
+        &:hover {
+            opacity: 1;
+        }
+
+        &:focus-visible {
+            outline-offset: 1px;
+        }
+    }
+
+    & .picture-slider__container {
+        // background-color: red;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 16px;
+
+        width: 100vw; // I need this so my picture slider can resize
+        max-width: 1300px;
+        height: 90%;
+
+        & .picture-slider__view-box {
+            background-color: rgba(0, 0, 0, 0.2);
+
+            max-width: 90%; 
+            min-height: 70%; // See Onemine Card because somehow when I click on differnt images, it changes the viewbox size when I don't want to.
+                            // I want to keep the viewbox the same size no matter the image
+            max-height: 352px;
+            
+            aspect-ratio: 16 / 9;
+
+            & img {
+                width: 100%;
+                height: 100%;
+
+                object-fit: scale-down;
+            }
+        }
+
+        & .picture-slider__nav { // Horizontal Group Slider like Netflix
+            position: relative;
+
+            width: 75%;
+            max-width: 526px;
+            // height: 64px;
+            height: 91px;
+            height: clamp(64px, 10vw, 91px);
+
+            & .picture-slider__nav-track-container {
+                height: 100%;
+                // overflow: hidden; // Use container div to get around trying to get my nav buttons to override the overflow hidden on parent but when I tried the position fixed, relative and overflow hidden thing on parent and child element it didn't work.
+
+                & .picture-slider__nav-track {
+                    background-color: b.$blue-400;
+                    display: flex;
+
+                    height: 100%;
+                    padding-block: 6px;
+
+                    overflow-x: auto;
+                    scroll-behavior: smooth;
+                    scroll-snap-type: x mandatory;
+
+                    & .picture-slider__nav-item {
+                        flex-shrink: 0; //Flex-shrink and max-width so I can resize my flex children based on width but maintain 5 children visible in my slider track
+                        // I don't even know how this (flex-shrink + max-width on flex children) works to create the desired flexbox behavior I wanted
+    
+                        position: relative;
+
+                        // width: 25%; // 1 group = 5 pictures 
+                        max-width: 20%; //padding is taken accoutn to the 20%
+                        width: 20vw;
+                        height: 100%; 
+                        margin-inline: 6px; // Use margin instead of flexbox gap because I want my slider nav to adjust with the flexbox children size
+
+                        aspect-ratio: 16 / 9;
+                        // border: 1px red solid;
+                        scroll-snap-align: end;
+
+                        
+                        & input[type="radio"] {
+                            @include container.visually-hidden;
+                            left: 0px;
+                            top: 0px;
+
+                            opacity: 0;
+
+                            & + label:before { //I have to put my image inside a button(acts as div) tag b/c I can't add a ::before to an image tag alone
+                                @include c.contrast_overlay(0);
+                                left: 0;
+                            }
+
+                            & + label {
+                                position: absolute;
+
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                
+                                &:hover {
+                                    border: 2px white solid;
+                                }
+
+                                &:hover:before {
+                                    cursor: pointer;
+                                    @include c.contrast_overlay(0.3);
+                                }
+                            }
+
+                            &:focus-visible + label img {
+                                outline: 2px solid ;
+                            }
+
+                            &:focus-visible + label:before {
+                                @include c.contrast_overlay(0.2);
+                            }
+
+                            & + label img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: contain;
+                            }
+
+                            &:checked + label img {
+                                border: 2px solid white;
+                            }
+
+                            &:checked + label:before {
+                                @include c.contrast_overlay(0.3);
+                            }
+                        }
+
+                        // &:hover:before,
+                        // &:focus-visible:before {
+                        //     cursor: pointer;
+                        //     @include c.contrast_overlay(0.3);
+                        // }
+
+                        // &:focus-visible {
+                        //     outline-offset: 0px;
+                        // }
+                    }
+
+                    // & .picture-slider__nav-item.active {
+                    //     border: 1px white solid;
+                    // }
+
+                }
+            }
+
+            & .picture-slider__nav-left-btn , .picture-slider__nav-right-btn {
+                display: grid; // For some reason when I place the svg inside divs the svgs aren't positioned in the center
+                place-items: center;
+                background-color: transparent;
+                color: white;
+                
+                position: absolute;
+                
+                border: none;
+                opacity: 0.9;
+
+                & svg {
+                    width: $slider-move-btn-size;
+                    height: $slider-move-btn-size;
+                }
+
+                &:focus-visible {outline-offset: 2px;}
+            }
+
+            & .picture-slider__nav-left-btn {
+                top: 50%;
+                // Margins on an absolute pos element don't affect nearby elements so I have to implicity set them using transform
+                
+                transform: translateX(calc(-100% - 6px)) translateY(-50%);
+            }
+
+            & .picture-slider__nav-right-btn {
+                top: 50%;
+                right: 0;
+                
+                transform: translateX(calc(100% + 4px)) translateY(-50%);
+            }
+
+        }
+
+    }
+
+    @media (min-width: 29rem) { // Mobile to Tablet
+        & {
+            height: $info_card_n_slider_height_tablet;   
+        }
+    }
+
+    @media (min-width: 930px) { // Tablet to Desktop
+        //For ultra wide screens I choose not to set a max-width on my parent pfp-card-gallery container because I want it to take up entire viewport on wider screens
+        & {
+            height: $info_card_n_slider_height_desktop;   
+
+            .picture-slider__container {
+    
+                & .picture-slider__view-box {
+                    margin-top: 8px;
+                    height: 75%;
+                }   
+            }
+        }
+    }
+
+}
+
+@keyframes btn_press_animation{
+    0% {
+        opacity: 0.9;
+    }
+
+    20% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 0.9;
+    }
+}

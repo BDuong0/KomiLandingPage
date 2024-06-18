@@ -1,0 +1,135 @@
+@use "../../utils/sass/base" as b;
+@use "../../utils/sass/utilities/commons" as c;
+
+/* _nav-btn-scss <-> _nav-menu-scss
+📱&🖥️🖼️ ✅
+^ Mobile and Desktop Version Design 
+📱➡️🖥️ ✅
+^ Responsiveness Complete 
+📜 ✅
+^ Prototype Javascript -> "nav-menu.js"
+
+Component done on Nov 3, 2023
+*/
+
+// ⏩ This component uses full page dark tint overlay from common.scss in utilities folder
+
+
+
+// Sidebar nav
+.primary-nav{
+    --menu_mode: 'mobile';
+    
+    position: fixed;
+    // background-color: lightblue;
+    background-image: url('/src/assets/bg_imgs/komi_camera_wallpaper.jpg');
+    background-position: bottom;
+    background-size: cover;
+    
+    width: 70%;
+    height: 100%;
+    top: 0;
+    right: -70%;
+
+    z-index: 2;
+
+    transition: right ease-out 200ms;
+    
+    // Background image overlay to increase contrast
+    &::after {
+        @include c.contrast_overlay(0.4);
+    }
+
+    &__links{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.30fr repeat(2, max-content); // No matter how many nav menu links I add, the container will auto adjust
+        // max-content: height of grid item is the size of text content
+        row-gap: 20px;
+        justify-items: flex-start;
+
+        position: absolute; // Position absoulate on child element and position fixed on parent element
+        
+        right: 0px;
+        width: 80%;
+        height: 100%;
+        
+        // ===== Style and Position Each Link ===
+        &>li:first-child {
+            // Position first link so it's not flushed against the top of the viewport 
+            // Align first link on bottom side of grid cell
+            align-self: flex-end;
+        }
+
+        & a { 
+            color: white;
+            font-size: b.$fs-700;
+            text-decoration: none;
+            
+            // Link opacity animation
+            &:hover {
+                opacity: 0.7;
+            }
+            
+            transition: opacity ease-in 200ms;
+        }
+        & li {
+            margin-right: 64px;
+            z-index: 2; //Need this or else links can't be hovered
+        }
+
+        // No underline hover on mobile
+        & li::after { 
+            display: none; 
+            content: "";
+        }
+
+    }
+}
+
+// Mobile -> Tablet & Desktop
+@media (min-width: 50em) {
+    .primary-nav {
+        --menu_mode: "desktop";
+        background-position: left;
+        background-size: cover;
+
+        &__links {
+            & a {
+                font-size: b.$fs-900; // Bigger font size at bigger screens
+            }
+            & li {
+                margin-right: 168px; // Just repositioned the links to not be too far to the right
+            }
+
+            // Style Link Underline 
+            & li::after { // animation -> nav-menu.js
+                display: block; // Need this for after psuedo-element to position properly w/in grid container
+                content: "";
+                background-color: white;
+
+                position: relative;
+
+                height: 5px;
+                width: 100%;
+                top: -5px;
+
+                z-index: 3;
+                transform-origin: center;
+                transform: scaleX(var(--underline-width, 0));
+                transition: transform ease-in 200ms;
+            }
+        }
+    }
+}
+
+// Tablet -> Desktop
+    // don't want word wrap on tablet screen so will wait until viewport gets wide enough so all of my nav link text can fit on one line
+@media (min-width: 925px) {
+    .primary-nav {
+        &__links {
+            justify-items: flex-end;
+        }   
+    }
+}
+
