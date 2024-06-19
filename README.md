@@ -2,7 +2,7 @@
 ### Production Code shown in this branch
 ## Anime: Komi can't Communicate
 
-<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.themoviedb.org%2Ft%2Fp%2Foriginal%2FrOEaKS6jdZacivHnM56NQ4yhccW.jpg&f=1&nofb=1&ipt=c8bd2c2038a64c54cc29b01f8da6eeafba3896f054c8933d2b89e51626784528&ipo=images" alt="Komi Can't Communicate Anime Visual" width="600"/>
+<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.themoviedb.org%2Ft%2Fp%2Foriginal%2FrOEaKS6jdZacivHnM56NQ4yhccW.jpg&f=1&nofb=1&ipt=c8bd2c2038a64c54cc29b01f8da6eeafba3896f054c8933d2b89e51626784528&ipo=images" alt="Komi Can't Communicate Anime Visual" width="300"/>
 
 #### Gist of what I've included in this landing page
 - What the anime is about
