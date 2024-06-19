@@ -1,6 +1,8 @@
 # Example Landing Page for Anime Show
+### Source code shown in this branch
 ## Anime: Komi can't Communicate
-![Komi can't Communicate Anime Visual](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.themoviedb.org%2Ft%2Fp%2Foriginal%2FrOEaKS6jdZacivHnM56NQ4yhccW.jpg&f=1&nofb=1&ipt=c8bd2c2038a64c54cc29b01f8da6eeafba3896f054c8933d2b89e51626784528&ipo=images)
+
+<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.themoviedb.org%2Ft%2Fp%2Foriginal%2FrOEaKS6jdZacivHnM56NQ4yhccW.jpg&f=1&nofb=1&ipt=c8bd2c2038a64c54cc29b01f8da6eeafba3896f054c8933d2b89e51626784528&ipo=images" alt="Komi Can't Communicate Anime Visual" width="600"/>
 
 #### Gist of what I've included in this landing page
 - What the anime is about
@@ -24,11 +26,13 @@ Fetch API and Jikan Unofficial MyAnimeList API for my 'anime reviews' nav menu p
 
 Project Notes (mainly for me)
 - Images used in this project are mixture of downloaded images and image links.
-    - First half of me working through this project, I used downloaded images files, but as the amount of images I need got larger I decided to use image links.
+    - For the first half of the time spent working through this project, I used downloaded images files, but as the amount of images I need got larger I decided to use image links.
 - Inpirations behind this landing page
     - Nike.com 
     - Goblin Slayer Anime Landing Page
     - Naruto Anime Landing Page
     - Amazon product reviews
     - fandom.com (fan wiki platform)
+- The "src/assets/bg_imgs" that I have is, because when I'm working with my module bundler, Parcel, it does weird things like not allowing me to build my code without creating file paths that I don't even need in the first place. 
+
 
