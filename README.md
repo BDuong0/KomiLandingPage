@@ -16,9 +16,8 @@
 - SASS pre-processor to write CSS
 - Javascript (Vanilla)
 - Parcel Module Bundler
-- ![Jikan API logo](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.myanimelist.net%2Fui%2FOK6W_koKDTOqqqLDbIoPAlfW3vHhBzO_m5KdmpfU-Dg&f=1&nofb=1&ipt=ac536cbd02370d472f0b3c7b07d1d8bebae59c4befb9a8efda6d4a3518ee539d&ipo=images)
-Fetch API and Jikan Unofficial MyAnimeList API for my 'anime reviews' nav menu page
-  
+- Fetch API and Jikan Unofficial MyAnimeList API for my 'anime reviews' navigation menu page
+ <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.myanimelist.net%2Fui%2FOK6W_koKDTOqqqLDbIoPAlfW3vHhBzO_m5KdmpfU-Dg&f=1&nofb=1&ipt=ac536cbd02370d472f0b3c7b07d1d8bebae59c4befb9a8efda6d4a3518ee539d&ipo=images" alt="Jikan API" width="200"/>
 
 <br>
 <br>
