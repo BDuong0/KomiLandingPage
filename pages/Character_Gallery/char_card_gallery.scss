@@ -117,12 +117,12 @@ $name_pfp_spacing: 8px; // Adjust the vertical space between the pfp picture and
 // I used to have my picture silder nested within my info_card and used height: 100% to get my picture slider to become the same height as the info_card
 // Decided to make my info card and picture slider adjacent to each other in the DOM for accessbility reasons
 // Used global SASS variables to get my info card and picture slider to be the same height, when I can't use height: 100% because the picture slider is now not nested within my info_card
-$info_card_n_slider_height_mobile: 465px;
-$info_card_n_slider_height_tablet: 600px;
-$info_card_n_slider_height_desktop: 560px;
+$info_card_n_slider_height_mobile: 85dvh;
+$info_card_n_slider_height_tablet: 75dvh;
+$info_card_n_slider_height_desktop: 80dvh;
 .pfp-card__info-card {
     $text-color: white;
-    $close-btn-size: 40px;
+    --close-btn-size: 40px;
     $content-side-spacing: 1rem;
     $picGallery-column-gap: 46px;
     $picGallery-row-gap: 24px;
@@ -172,9 +172,9 @@ $info_card_n_slider_height_desktop: 560px;
         position: fixed; //Override overflow hidden by setting overflow and pos relative to the element's immediate parent and set the element's position to fixed
         // https://www.youtube.com/watch?v=jLtNh5Kl4TA
 
-        width: $close-btn-size;
-        top: -$close-btn-size; // Can't move my close btn up base on the icon's height with translateY()
-        right: $close-btn-size - $close-btn-size + 4px;
+        width: var(--close-btn-size);
+        top: calc(-1 * var(--close-btn-size)); // Can't move my close btn up base on the icon's height with translateY()
+        right: 4px;
         
         opacity: 0.7;
         border: none;
@@ -304,6 +304,7 @@ $info_card_n_slider_height_desktop: 560px;
         grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
         column-gap: $picGallery-column-gap;
         row-gap: $picGallery-row-gap;
+        align-items: center;
         
         width: 95%;
         height: 58%; // I could have sized this grid container with the overflow and not have to explicitly size the parent wrapper container but this works still
@@ -320,7 +321,7 @@ $info_card_n_slider_height_desktop: 560px;
             position: relative;
             
             width: 100%;
-            height: 100px;
+            height: 92px;
             object-fit: contain;
 
             & button {
@@ -361,6 +362,7 @@ $info_card_n_slider_height_desktop: 560px;
 
     @media (min-width: 29rem) { // Mobile -> Tablet 
         & {
+            --close-btn-size: 48px;
             height: $info_card_n_slider_height_tablet;
 
             & &__wrapper .info-card__header {
@@ -381,6 +383,7 @@ $info_card_n_slider_height_desktop: 560px;
     @media (min-width: 930px) { // Tablet to Desktop
         //For ultra wide screens I choose not to set a max-width on my parent pfp-card-gallery container because I want it to take up entire viewport on wider screens
         & {
+            --close-btn-size: 64px;
             $picGallery-row-gap: 16px;
                 
             height: $info_card_n_slider_height_desktop;
@@ -395,7 +398,7 @@ $info_card_n_slider_height_desktop: 560px;
             }
 
             & &__wrapper .info-card__pictures {
-                column-gap: $picGallery-column-gap;
+                grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
                 row-gap: $picGallery-row-gap;
 
                 padding-inline: $content-side-spacing * 2;
@@ -415,12 +418,15 @@ $info_card_n_slider_height_desktop: 560px;
 }
 
 .info-card__picture-slider {
-    $slider-close-btn-size: 40px;
-    $slider-move-btn-size: 32px;
+    --slider-close-btn-size: 40px;
+    --slider-move-btn-size: 40px;
+    --slider-track-n-move-btn-spacing: 2px;
+    --each-scroll-group-number-of-items: 4;
     
     background-color: b.$purple-300;
-    display: grid;
-    place-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     position: fixed;
 
@@ -433,6 +439,7 @@ $info_card_n_slider_height_desktop: 560px;
     z-index: 3;
     transition: opacity 200ms ease-in;
     opacity: 0;
+    text-align: end; // I tried to set margin-left: auto on my slider close button and that didn't work so I went with this alternative
 
     &[data-visible="hide"] {
         display: none;
@@ -444,12 +451,11 @@ $info_card_n_slider_height_desktop: 560px;
 
     & .picture-slider__close-btn {
         background-color: transparent;
-        
-        position: absolute;
+        align-self: end;
 
-        width: $slider-close-btn-size;
-        top: 4px;
-        right: $slider-close-btn-size - $slider-close-btn-size + 4px;
+        width: var(--slider-close-btn-size);
+        margin-top: 4px;
+        margin-right: 4px;
         
         border: none;
 
@@ -469,16 +475,15 @@ $info_card_n_slider_height_desktop: 560px;
     }
 
     & .picture-slider__container {
-        // background-color: red;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         row-gap: 16px;
+        flex-grow: 1;
+        justify-content: center;
 
-        width: 100vw; // I need this so my picture slider can resize
         max-width: 1300px;
-        height: 90%;
+        width: 100%;
 
         & .picture-slider__view-box {
             background-color: rgba(0, 0, 0, 0.2);
@@ -503,9 +508,7 @@ $info_card_n_slider_height_desktop: 560px;
 
             width: 75%;
             max-width: 526px;
-            // height: 64px;
-            height: 91px;
-            height: clamp(64px, 10vw, 91px);
+            height: 88px;
 
             & .picture-slider__nav-track-container {
                 height: 100%;
@@ -523,22 +526,16 @@ $info_card_n_slider_height_desktop: 560px;
                     scroll-snap-type: x mandatory;
 
                     & .picture-slider__nav-item {
-                        flex-shrink: 0; //Flex-shrink and max-width so I can resize my flex children based on width but maintain 5 children visible in my slider track
-                        // I don't even know how this (flex-shrink + max-width on flex children) works to create the desired flexbox behavior I wanted
-    
                         position: relative;
-
-                        // width: 25%; // 1 group = 5 pictures 
-                        max-width: 20%; //padding is taken accoutn to the 20%
+                        
+                        max-width: calc(100% / var(--each-scroll-group-number-of-items)); 
+                        min-width: calc(100% / var(--each-scroll-group-number-of-items)); 
                         width: 20vw;
                         height: 100%; 
-                        margin-inline: 6px; // Use margin instead of flexbox gap because I want my slider nav to adjust with the flexbox children size
 
                         aspect-ratio: 16 / 9;
-                        // border: 1px red solid;
                         scroll-snap-align: end;
 
-                        
                         & input[type="radio"] {
                             @include container.visually-hidden;
                             left: 0px;
@@ -558,6 +555,7 @@ $info_card_n_slider_height_desktop: 560px;
                                 left: 0;
                                 width: 100%;
                                 height: 100%;
+                                padding-inline: 2px;
                                 
                                 &:hover {
                                     border: 2px white solid;
@@ -591,22 +589,7 @@ $info_card_n_slider_height_desktop: 560px;
                                 @include c.contrast_overlay(0.3);
                             }
                         }
-
-                        // &:hover:before,
-                        // &:focus-visible:before {
-                        //     cursor: pointer;
-                        //     @include c.contrast_overlay(0.3);
-                        // }
-
-                        // &:focus-visible {
-                        //     outline-offset: 0px;
-                        // }
                     }
-
-                    // & .picture-slider__nav-item.active {
-                    //     border: 1px white solid;
-                    // }
-
                 }
             }
 
@@ -622,8 +605,8 @@ $info_card_n_slider_height_desktop: 560px;
                 opacity: 0.9;
 
                 & svg {
-                    width: $slider-move-btn-size;
-                    height: $slider-move-btn-size;
+                    width: var(--slider-move-btn-size);
+                    height: var(--slider-move-btn-size);
                 }
 
                 &:focus-visible {outline-offset: 2px;}
@@ -633,36 +616,52 @@ $info_card_n_slider_height_desktop: 560px;
                 top: 50%;
                 // Margins on an absolute pos element don't affect nearby elements so I have to implicity set them using transform
                 
-                transform: translateX(calc(-100% - 6px)) translateY(-50%);
+                transform: translateX(calc(-100% - var(--slider-track-n-move-btn-spacing))) translateY(-50%);
             }
 
             & .picture-slider__nav-right-btn {
                 top: 50%;
                 right: 0;
                 
-                transform: translateX(calc(100% + 4px)) translateY(-50%);
+                transform: translateX(calc(100% + var(--slider-track-n-move-btn-spacing))) translateY(-50%);
             }
 
         }
 
     }
 
-    @media (min-width: 29rem) { // Mobile to Tablet
+    @media (min-width: 29em) { // Mobile to Tablet
         & {
-            height: $info_card_n_slider_height_tablet;   
+            --slider-close-btn-size: 48px;
+            --slider-move-btn-size: 56px;
+            --slider-track-n-move-btn-spacing: 16px;
+            --each-scroll-group-number-of-items: 5;
+            
+            height: $info_card_n_slider_height_tablet;
+            
+            .picture-slider__container {
+                & .picture-slider__nav { 
+                    max-width: none;
+                }   
+            }
         }
     }
 
-    @media (min-width: 930px) { // Tablet to Desktop
+    @media (min-width: 58.125em) { // Tablet to Desktop
         //For ultra wide screens I choose not to set a max-width on my parent pfp-card-gallery container because I want it to take up entire viewport on wider screens
         & {
+            --slider-close-btn-size: 64px;
+            --each-scroll-group-number-of-items: 6;
             height: $info_card_n_slider_height_desktop;   
 
             .picture-slider__container {
-    
                 & .picture-slider__view-box {
                     margin-top: 8px;
                     height: 75%;
+                }   
+
+                & .picture-slider__nav { 
+                    width: 55%;
                 }   
             }
         }

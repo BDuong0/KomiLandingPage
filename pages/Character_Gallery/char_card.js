@@ -241,7 +241,7 @@ pfp_card_containers.forEach(container => {
     const picture_slider = container.querySelector('.info-card__picture-slider'); // Main Parent container 
     const close_slider_btns = picture_slider.querySelectorAll('.picture-slider__close-btn');
     const slider_img_track = picture_slider.querySelector('.picture-slider__container .picture-slider__nav .picture-slider__nav-track-container .picture-slider__nav-track');
-    let slider_img_track__images = slider_img_track.querySelectorAll(".picture-slider__nav-item"); // initially this will return null, but will be not null at showPictureSlider()
+    let slider_img_track__images = slider_img_track.querySelectorAll(".picture-slider__nav-item"); // initially this will return null, but will be not null when I querry select again in showPictureSlider()
     const slider_viewbox_image = picture_slider.querySelector('.picture-slider__container .picture-slider__view-box img');
     const slider_left_btn = picture_slider.querySelector('.picture-slider__container .picture-slider__nav-left-btn');
     const slider_right_btn = picture_slider.querySelector('.picture-slider__container .picture-slider__nav-right-btn');
@@ -363,8 +363,10 @@ pfp_card_containers.forEach(container => {
         // Remember the all slider items are getting removed when the slider is closed and repopulated
         // So no need to figure out how to run this populate_pic_slider() only once
 
+        const number_slides_in_scroll_group = Number(getComputedStyle(picture_slider).getPropertyValue("--each-scroll-group-number-of-items"));
+        console.log("number_slides_in_scroll_group: " + number_slides_in_scroll_group);
         // Set the slider_img_track.scrollLeft so the user immediately sees the image they clicked on in the slider nav upon opening
-        set_inital_slider_pos(index_clicked, 5, li_info_card_pictures, slider_img_track);
+        set_inital_slider_pos(index_clicked, number_slides_in_scroll_group, li_info_card_pictures, slider_img_track);
 
         // Indicate current active image in the slider nav
         slider_img_track__images = slider_img_track.querySelectorAll(".picture-slider__nav-item");
@@ -446,7 +448,7 @@ function populate_pic_slider(info_card_pics, slider_track){
 
 function set_inital_slider_pos(index_clicked, cards_in_group, info_card_pictures, slider_img_track){
     // 1: Calculate number of scroll groups based on width of scroller track visible
-    var num_of_scroll_groups = Math.ceil(info_card_pictures.length / cards_in_group);
+    let num_of_scroll_groups = Math.ceil(info_card_pictures.length / cards_in_group);
         // Need to round up the num of scroll groups b/c if I have 12 cards / 5 cards in one group = 2.4 -> 2 groups(5 cards each) but the 2 extra cards left wouldn't get detected by the for loop before and the scroll position would be set to 0 even though 2nd last or very last photo on nav was selected
         // Always round up to account for numbers that don't evenly divide by cards_in_group (like 12 / 5 would get us two groups of five and two extra cards that are part of the third group)
     // Adjust slider track placement so if you click on 1st or 14th image from the info_card the slider will be positioned so the image you clicked on it visible
@@ -454,12 +456,13 @@ function set_inital_slider_pos(index_clicked, cards_in_group, info_card_pictures
 
     // 2️: Find out what num scroll group the info card picture you clicked on
     
-    var group_index_start = 0;
-    var group_index_end = cards_in_group - 1; // 5 cards in one scroll group so indexs are 0,1,2,3,4
-    var located_card_group;
+    let group_index_start = 0;
+    let group_index_end = cards_in_group - 1; // 5 cards in one scroll group so indexs are 0,1,2,3,4
+    let located_card_group;
+    
     for (let i = 1; i <= num_of_scroll_groups; i++){
+        
         if (group_index_start <= index_clicked && index_clicked <= group_index_end){
-            // console.log(index_clicked + " inside " + group_index_start + " --- " + group_index_end);
             located_card_group = i;
         }
         group_index_start += cards_in_group;
@@ -469,7 +472,7 @@ function set_inital_slider_pos(index_clicked, cards_in_group, info_card_pictures
     }
         
     // 3: Set slider inital position
-    var scroll_width = slider_img_track.getBoundingClientRect().width; // Width of one scroll group of 5 cards (cards_in_group)
+    let scroll_width = slider_img_track.getBoundingClientRect().width; // Width of one scroll group of 5 cards (cards_in_group)
     // console.log(slider_img_track.scrollLeft);
     slider_img_track.scrollLeft = scroll_width * (located_card_group - 1); // Set slider position so located_card_group is visible upon opening
     // Group 1's scroll_width should be 0 not ~270 so have to offset located_card_group by -1 if I want the corrent scrollLeft value

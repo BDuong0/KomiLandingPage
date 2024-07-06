@@ -7,19 +7,13 @@ const move_right_btn = document.querySelector(".img-carousel .img-carousel__navi
 
 // Move track one slide to the left/right until next slide snaps into place
 move_right_btn.addEventListener('click', e => {
-    
-    if (img_carousel_track.getBoundingClientRect().width >= 2266) { // Super wide screens need to move scrollLeft by larger amount because +-200 on a super wide screen becomes super small
-        img_carousel_track.scrollLeft += 600;
-    } else { // Desktop, Tablet and Mobile
-        img_carousel_track.scrollLeft += 200;
-    }
-    // console.log(img_carousel_track.getBoundingClientRect().width);
+    // scroll_amount is in proportion to how big the carousel track is as it resizes with the viewport
+    // - on bigger and wider screens a scroll_amount of 200px (which made the carousel move) would not make the bigger carousel move b/c the carousel sees 200px as now 0px
+    let scroll_amount = img_carousel_track.getBoundingClientRect().width * 0.30;
+    img_carousel_track.scrollLeft += scroll_amount;
 })
 
 move_left_btn.addEventListener('click', e => {
-    if (img_carousel_track.getBoundingClientRect().width >= 2266) { 
-        img_carousel_track.scrollLeft -= 600;
-    } else { 
-        img_carousel_track.scrollLeft -= 200;
-    }
+    let scroll_amount = img_carousel_track.getBoundingClientRect().width * 0.30;
+    img_carousel_track.scrollLeft -= scroll_amount;
 })

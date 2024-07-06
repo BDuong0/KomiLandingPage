@@ -148,6 +148,10 @@ Component Features
             opacity: 1;
         }
 
+        &:focus-visible {
+            outline-offset:-1px;
+        }
+
     }   
 }
 
@@ -173,10 +177,28 @@ Component Features
 
         &__popup .video_close_btn {
             
-            width: clamp(19px,10vw,32px);
-            top: -clamp(19px,10vw,32px);
-            right: 0px;
-            transform: translateX(32px);
+            $close_btn_size: 48px;
+            width: $close_btn_size;
+            top: -$close_btn_size; 
+            right: -$close_btn_size + 4px;
+        }
+    }
+}
+
+// Tablet -> Desktop
+@media (min-width: 844px) {
+    .video-card {
+
+        &__popup .popup_wrapper{
+            width: 70%;
+        }
+
+        &__popup .video_close_btn {
+            
+            $close_btn_size: 64px;
+            width: $close_btn_size;
+            top: -$close_btn_size; 
+            right: -$close_btn_size + 4px;
         }
     }
 }

@@ -16,7 +16,6 @@ This component is a full width image carousel
 Component done on Nov 12, 2023
 */
 
-$column-gap: 24px;
 $icon-size: 48px;
 //$heading-spacing: 64px; //spacing at the left side the title & the right side of nav buttons
 $heading-spacing: 1px, 4vw, 64px; // SASS List used to set up clamp for the spacing around my title and left and right arrow btns
@@ -36,7 +35,7 @@ $heading-spacing: 1px, 4vw, 64px; // SASS List used to set up clamp for the spac
 }
 
 .img-carousel {
-    width: 98.8dvw;
+    width: 98.5vw;
 
     &__navigation { //CSS selectors can go 1 element nested deep?
         .slide-right-btn , .slide-left-btn{
@@ -47,51 +46,38 @@ $heading-spacing: 1px, 4vw, 64px; // SASS List used to set up clamp for the spac
 }
 
 .img-carousel__track {
+    $column-gap: 4px;
+    
     display: flex;
     background-color: black;
-    // aspect-ratio: 1; //images responsive for mobile screens
-    // height of flex container is responsive with aspect-ratio
-    // aspect ratio is responsive to viewport??
+    
+    // height: 400px;
+    width: 100vw;
 
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 
-    & img:last-child {
-        padding-right: $column-gap;
-    }
+    & &-item {
+        min-width: 45%;
+        max-width: 45%;
 
-    & img {
-        // Use child padding for consistent padding of flex container
-        // width and aspect-ratio as wonky way to keep my images the same aspect ratio as viewport gets wider
-        max-width: 90%;
-        // aspect-ratio: 1 / 2;
-        padding-block: $column-gap;
         padding-inline: $column-gap;
-        
+
         scroll-snap-align: start; // this property combined with scroll-snap-type creates scroll snapping to the left of each flex item
     }
 
-    & img:first-child {
-        padding-left: 12px; //Work around column gap so scroll snap leaves some padding to the left edge
+    & &-item:last-child {
+        padding-right: 0px;
     }
-
 }
 
 
-// Mobile -> Tablet & Desktop
+// Mobile -> Tablet
 @media (min-width: 37.9375em){
     .img-carousel {
-        // Was thinking about trying to get my carousel images to grow with viewport as I go to ultra wide screens but I don't know how to do that while keep aspect ratio so my images don't stretch
-        &__track {
-            & img {
-                aspect-ratio: 0;
-                width: 20vw;
-                max-width: 20%;
-            }
-        }
-
         &__btn-wrapper {
+            border: none;
             margin-right: clamp(nth($heading-spacing, 1), nth($heading-spacing, 2), nth($heading-spacing, 3));   
         }
 
@@ -119,8 +105,34 @@ $heading-spacing: 1px, 4vw, 64px; // SASS List used to set up clamp for the spac
             }
 
             .slide-right-btn {margin-left: 8px;}
+        }
+    }
 
+    .img-carousel__track {
+        $column-gap: 8px;
+    
+        & &-item {
+            min-width: 30%;
+            max-width: 30%;
+            padding-right: $column-gap;
+        }
+    }
+
+}
+
+// Tablet -> Desktop
+@media (min-width: 64em) {
+    .img-carousel__track {
+        $column-gap: 8px;
+
+        max-height: 697px;
+        max-width: 1949px;
+        margin-inline: auto;
+    
+        & &-item {
+            min-width: 22%;
+            max-width: 22%;
+            padding-right: $column-gap;
         }
     }
 }
-
