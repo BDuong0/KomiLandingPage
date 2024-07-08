@@ -32,6 +32,6 @@ Project Notes (mainly for me)
     - Naruto Anime Landing Page
     - Amazon product reviews
     - fandom.com (fan wiki platform)
-- The "src/assets/bg_imgs" that I have is, because when I'm working with my module bundler, Parcel, it does weird things like not allowing me to build my code without creating file paths that I don't even need in the first place. 
+
 
 
